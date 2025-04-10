@@ -1,3 +1,4 @@
+import { CompleteAttachment } from "../types";
 import { ReadonlyJSONObject } from "../utils/json/json-value";
 import { AssistantCloudAPI } from "./AssistantCloudAPI";
 
@@ -9,6 +10,7 @@ export type CloudMessage = {
   updated_at: Date;
   format: "aui/v0" | string;
   content: ReadonlyJSONObject;
+  attachments: CompleteAttachment[];
 };
 
 type AssistantCloudThreadMessageListResponse = {
