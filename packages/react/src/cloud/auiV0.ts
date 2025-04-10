@@ -1,5 +1,5 @@
 import { JSONObject } from "@ai-sdk/provider";
-import { ThreadMessage } from "../types";
+import { CompleteAttachment, ThreadMessage } from "../types";
 import { MessageStatus } from "../types/AssistantTypes";
 import { fromThreadMessageLike } from "../runtimes/external-store/ThreadMessageLike";
 import { CloudMessage } from "./AssistantCloudThreadMessages";
@@ -47,6 +47,7 @@ type AuiV0Message = {
   readonly role: "assistant" | "user" | "system";
   readonly status?: MessageStatus;
   readonly content: readonly AuiV0MessageContentPart[];
+  readonly attachments?: readonly CompleteAttachment[];
   readonly metadata: {
     readonly unstable_annotations: readonly ReadonlyJSONValue[];
     readonly unstable_data: readonly ReadonlyJSONValue[];
@@ -65,6 +66,7 @@ export const auiV0Encode = (message: ThreadMessage): AuiV0Message => {
   // info: ID and createdAt are ignored (we use the server value instead)
   return {
     role: message.role,
+    attachments: message.attachments?.map(({ file, ...rest }) => rest),
     content: message.content.map((part) => {
       const type = part.type;
       switch (type) {
@@ -134,7 +136,7 @@ export const auiV0Encode = (message: ThreadMessage): AuiV0Message => {
               : message.status,
         }
       : undefined),
-  };
+  } as any;
 };
 
 export const auiV0Decode = (

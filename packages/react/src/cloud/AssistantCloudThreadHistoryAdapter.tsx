@@ -22,7 +22,7 @@ class AssistantCloudThreadHistoryAdapter implements ThreadHistoryAdapter {
           ? ((await this._getIdForLocalId[parentId]) ?? parentId)
           : null,
         format: "aui/v0",
-        content: auiV0Encode(message),
+        content: auiV0Encode(message) as any,
       })
       .then(({ message_id }) => {
         this._getIdForLocalId[message.id] = message_id;
